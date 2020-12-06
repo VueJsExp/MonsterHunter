@@ -1,1 +1,3 @@
-"# MonsterHunter" 
+# MonsterHunter
+
+A simple game

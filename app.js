@@ -11,7 +11,8 @@ const app=Vue.createApp({
             playerMaxHealth: 100,
             monsterMaxHealth: 100,
             specialAttackRoundCount: 3,
-            winner: null
+            winner: null,
+            logMessages: []
         };
     },
     watch: {
@@ -74,12 +75,14 @@ const app=Vue.createApp({
             this.specialAttackRoundCount++;
             const attackValue=getRandomValue(5,12);
             this.monsterHealth-=attackValue;
+            this.addLogMessage("player", "attack", attackValue);
             this.attackPlayer();
         },
         attackPlayer()
         {
             const attackValue=getRandomValue(8,15);
             this.playerHealth-=attackValue;
+            this.addLogMessage("monster", "attack", attackValue);
         },
         specialAttackMonster()
         {
@@ -88,6 +91,7 @@ const app=Vue.createApp({
                 this.specialAttackRoundCount=1;
                 const attackValue=getRandomValue(10,25);
                 this.monsterHealth-=attackValue;
+                this.addLogMessage("player", "special-attack", attackValue);
                 this.attackPlayer();
             }
         },
@@ -99,6 +103,7 @@ const app=Vue.createApp({
                 this.playerHealth=this.playerMaxHealth;
             else
                 this.playerHealth+=healValue;
+            this.addLogMessage("player", "heal", healValue);
             this.attackPlayer();
         },
         startGame()
@@ -107,6 +112,19 @@ const app=Vue.createApp({
             this.playerHealth=this.playerMaxHealth;
             this.specialAttackRoundCount=3;
             this.winner=null;
+            this.logMessages=[];
+        },
+        surrender()
+        {
+            this.winner="monster";
+        },
+        addLogMessage(who, what, value)
+        {
+            this.logMessages.unshift({
+                actionBy: who,
+                actionType: what,
+                actionValue: value
+            });
         }
     }
 });
